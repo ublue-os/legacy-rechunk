@@ -58,6 +58,7 @@ meta:
     files:
       - /usr/lib/modules/*vmlinuz*
       - /usr/lib/modules/*ko.xz
+      - /usr/lib/modules/*/System.map
   mesa-va:
     packages:
       - mesa-va-drivers*
@@ -774,3 +775,6 @@ meta:
   1password:
     packages:
       - 1password*
+  tailscale:
+    files:
+      - /usr/bin/tailscaled
