@@ -51,8 +51,8 @@ jobs:
             exit 1
           fi
 
-          sudo podman tag fedora_build ghcr.io/${{ github.repository_owner }}/rechunk:$VERSION-${{ matrix.arch }}
-          sudo podman push ghcr.io/${{ github.repository_owner }}/rechunk:$VERSION-${{ matrix.arch }}
+          sudo podman tag fedora_build ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$VERSION-${{ matrix.arch }}
+          sudo podman push ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$VERSION-${{ matrix.arch }}
   
   deploy_combined_ghcr:
     runs-on: ubuntu-24.04
@@ -76,13 +76,13 @@ jobs:
 
           sudo podman manifest create rechunk
           
-          SHA=$(sudo skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/rechunk:$VERSION-x86_64 | jq --raw-output ".Digest")
-          sudo podman manifest add rechunk ghcr.io/${{ github.repository_owner }}/rechunk@$SHA --arch amd64
+          SHA=$(sudo skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$VERSION-x86_64 | jq --raw-output ".Digest")
+          sudo podman manifest add rechunk ghcr.io/${{ github.repository_owner }}/${{ github.repository }}@$SHA --arch amd64
           if [[ "${{ github.event.inputs.x86 }}" != "true" ]]; then
-            SHA=$(sudo skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/rechunk:$VERSION-aarch64 | jq --raw-output ".Digest")
-            sudo podman manifest add rechunk ghcr.io/${{ github.repository_owner }}/rechunk@$SHA --arch arm64
+            SHA=$(sudo skopeo inspect docker://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$VERSION-aarch64 | jq --raw-output ".Digest")
+            sudo podman manifest add rechunk ghcr.io/${{ github.repository_owner }}/${{ github.repository }}@$SHA --arch arm64
           fi
 
-          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/rechunk:latest
-          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/rechunk:stable
-          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/rechunk:$VERSION
+          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:stable
+          sudo podman manifest push --all=false rechunk ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:$VERSION
